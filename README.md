@@ -23,6 +23,15 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
+## Deployment
+
+Hosted on Vercel, tracking the `claude/zen-hawking-emn930` branch as the
+Production environment (**Settings → Environments → Production → Branch
+Tracking**). Environment variables (`NEXT_PUBLIC_SUPABASE_URL`,
+`NEXT_PUBLIC_SUPABASE_ANON_KEY`, and later `SUPABASE_SERVICE_ROLE_KEY` /
+`ANTHROPIC_API_KEY`) are set in the Vercel project settings, not committed —
+see `.env.local.example` for the full list.
+
 ## Project status
 
 Being built in phases — see the plan for the full roadmap:
