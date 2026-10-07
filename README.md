@@ -37,8 +37,8 @@ see `.env.local.example` for the full list.
 Being built in phases — see the plan for the full roadmap:
 
 - [x] Phase 0 — project scaffolding
-- [ ] Phase 1 — auth (teacher accounts) + student namelist
-- [ ] Phase 2 — progress reports + PDF export
+- [x] Phase 1 — auth (teacher accounts) + student namelist
+- [x] Phase 2 — progress reports (editable template + PDF export)
 - [ ] Phase 3 — lesson plans
 - [ ] Phase 4 — photo/video attachments
 - [ ] Phase 5 — AI chatbot assistant

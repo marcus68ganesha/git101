@@ -3,9 +3,11 @@
 1. Create a project at [supabase.com](https://supabase.com) (free tier is
    plenty for this app's scale).
 2. In the Supabase dashboard, open **SQL Editor** and run each file in
-   `migrations/` in order (currently just `0001_profiles_and_students.sql`).
+   `migrations/` **in order**:
+   `0001_profiles_and_students.sql`, then `0002_report_templates.sql`.
    Re-running a migration is safe — every statement is `if not exists` /
-   `or replace` / `drop ... if exists`.
+   `or replace` / `drop ... if exists` (or, for the seed data, an explicit
+   "skip if it already exists" check).
 3. Copy **Project Settings → API → Project URL** and **anon public key**
    into your local `.env.local` (see `.env.local.example` in the repo root).
 4. Disable public sign-ups: **Authentication → Providers → Email** → turn

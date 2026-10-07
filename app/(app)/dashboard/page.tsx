@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function DashboardPage() {
   return (
     <div>
@@ -5,8 +7,8 @@ export default function DashboardPage() {
         Dashboard
       </h1>
       <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
-        Recent reports and upcoming lessons will show up here as those
-        features are built (Phases 2–3).
+        Head to <Link href="/reports" className="underline">Reports</Link> to
+        write a progress report. Lesson plans are coming in Phase 3.
       </p>
     </div>
   );
