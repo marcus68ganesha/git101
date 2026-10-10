@@ -1,8 +1,12 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-// Routes that don't require a logged-in teacher account.
-const PUBLIC_ROUTES = ["/login"];
+// Routes that don't require a logged-in teacher account. /reset-password
+// must be public too: a password-recovery link lands here with a token in
+// the URL *hash* (never sent to the server), so there's no session cookie
+// yet for this check to see — the client-side JS on that page is what
+// actually establishes the session from the hash.
+const PUBLIC_ROUTES = ["/login", "/reset-password"];
 
 /**
  * Refreshes the Supabase session cookie on every request and redirects
