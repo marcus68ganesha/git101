@@ -78,7 +78,7 @@ create table if not exists public.students (
   notes text,
   photo_url text,
   is_active boolean not null default true,
-  created_by uuid references public.profiles (id),
+  created_by uuid references public.profiles (id) on delete set null,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );

@@ -20,7 +20,7 @@ create table if not exists public.report_templates (
   id uuid primary key default gen_random_uuid(),
   name text not null,
   is_active boolean not null default false,
-  created_by uuid references public.profiles (id),
+  created_by uuid references public.profiles (id) on delete set null,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
@@ -122,7 +122,7 @@ create table if not exists public.progress_reports (
   teacher_name text,
   duration_text text,
   status text not null default 'draft' check (status in ('draft', 'final')),
-  created_by uuid references public.profiles (id),
+  created_by uuid references public.profiles (id) on delete set null,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
