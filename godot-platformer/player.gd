@@ -6,11 +6,15 @@ const JUMP_VELOCITY = -400.0
 const MAX_JUMPS = 2 # 1 = normal jump, 2 = double jump, 3 = triple jump...
 
 var jump_count := 0
+var is_dead := false
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 
 
 func _physics_process(delta: float) -> void:
+	if is_dead:
+		return
+
 	if is_on_floor():
 		# Landed: refill the jumps.
 		jump_count = 0
@@ -52,3 +56,20 @@ func update_animation(direction: float) -> void:
 		sprite.play("Run")
 	else:
 		sprite.play("Idle")
+
+
+func die() -> void:
+	if is_dead:
+		return
+	is_dead = true
+	velocity = Vector2.ZERO
+	sprite.play("Hit")
+
+	# Freeze the whole game, but keep the player running so "Hit" still animates.
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	get_tree().paused = true
+
+	# SceneTree timers keep ticking while paused, so this still fires.
+	await get_tree().create_timer(1.0).timeout
+	get_tree().paused = false
+	get_tree().reload_current_scene()
