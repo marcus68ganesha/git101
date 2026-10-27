@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>IR Receipts</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <aside class="sidebar no-print">
+    <div class="brand">
+      <img id="brandLogo" alt="IR Robotics logo">
+      <div><b>IR Robotics</b><span>Payments &amp; Receipts</span></div>
+    </div>
+    <nav>
+      <button data-view="dashboard" class="active">📊 Dashboard</button>
+      <button data-view="form">➕ New Payment</button>
+      <button data-view="records">📁 Records</button>
+      <button data-view="backup">💾 Backup</button>
+    </nav>
+    <p class="offline-note">Works offline · data saved on this computer</p>
+  </aside>
+
+  <main>
+    <div id="banner" class="banner no-print" hidden></div>
+
+    <!-- DASHBOARD -->
+    <section id="view-dashboard" class="view">
+      <div class="view-head">
+        <h1>Dashboard</h1>
+        <div class="month-nav">
+          <button id="dPrev" class="btn ghost" title="Previous month">◀</button>
+          <input type="month" id="dMonth">
+          <button id="dNext" class="btn ghost" title="Next month">▶</button>
+        </div>
+      </div>
+      <div class="tiles">
+        <div class="tile main"><span>Total received this month</span><b id="tTotal">RM 0.00</b></div>
+        <div class="tile"><span>Receipts this month</span><b id="tCount">0</b></div>
+        <div class="tile"><span>Cash</span><b id="tCash">RM 0.00</b></div>
+        <div class="tile"><span>Transfer</span><b id="tTransfer">RM 0.00</b></div>
+        <div class="tile"><span>Card</span><b id="tCard">RM 0.00</b></div>
+      </div>
+      <div class="card">
+        <h3>Monthly totals — <span id="chartYear"></span> <small>(click a bar to open that month)</small></h3>
+        <div id="chart"></div>
+        <p class="muted">Year total: <b id="yearTotal">RM 0.00</b></p>
+      </div>
+      <div class="card">
+        <div class="card-head"><h3>Payments in <span id="dMonthLabel"></span></h3>
+          <button class="btn primary" data-goto="form">➕ Add payment</button></div>
+        <div id="dList"></div>
+      </div>
+    </section>
+
+    <!-- NEW / EDIT PAYMENT -->
+    <section id="view-form" class="view" hidden>
+      <div class="view-head"><h1 id="formTitle">New Payment</h1><span id="formReceiptNo" class="pill"></span></div>
+      <form id="payForm" class="card" autocomplete="off">
+        <div class="grid">
+          <label>Date<input type="date" name="date" required></label>
+          <label>Payment method
+            <select name="method" required>
+              <option>Cash</option><option>Transfer</option><option>Card</option>
+            </select>
+          </label>
+          <label class="span2">School name<input name="schoolName" list="schoolList" required placeholder="e.g. SK Bukit Rahman Putra"></label>
+          <label class="span2">Person in charge<input name="personInCharge" list="personList" placeholder="e.g. Pn. Aminah"></label>
+          <label>Reference no. <small>(optional)</small><input name="reference" placeholder="Bank ref / card approval"></label>
+          <label>Notes <small>(optional)</small><input name="notes" placeholder="Shown on receipt"></label>
+        </div>
+        <datalist id="schoolList"></datalist>
+        <datalist id="personList"></datalist>
+
+        <h3>Items / Description</h3>
+        <table class="items">
+          <thead><tr><th>Description</th><th class="num">Qty</th><th class="num">Unit price (RM)</th><th class="num">Amount</th><th></th></tr></thead>
+          <tbody id="itemRows"></tbody>
+          <tfoot><tr><td colspan="3" class="r"><b>TOTAL</b></td><td class="r"><b id="formTotal">RM 0.00</b></td><td></td></tr></tfoot>
+        </table>
+        <button type="button" id="addRow" class="btn ghost">＋ Add row</button>
+
+        <div class="actions">
+          <button type="button" id="cancelForm" class="btn ghost">Cancel</button>
+          <button type="submit" class="btn primary">💾 Save &amp; view receipt</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- RECORDS -->
+    <section id="view-records" class="view" hidden>
+      <div class="view-head"><h1>Payment Records</h1>
+        <div class="actions">
+          <button id="exportXlsx" class="btn">📗 Export Excel</button>
+          <button id="exportPdf" class="btn">📕 Export PDF</button>
+        </div>
+      </div>
+      <div class="card filters">
+        <input type="search" id="rSearch" placeholder="🔍 Search receipt no., school, person, item…">
+        <select id="rScope">
+          <option value="month">Month</option>
+          <option value="year">Whole year</option>
+          <option value="all">All records</option>
+        </select>
+        <input type="month" id="rMonth">
+        <select id="rMethod">
+          <option value="">All methods</option><option>Cash</option><option>Transfer</option><option>Card</option>
+        </select>
+      </div>
+      <div class="card">
+        <table class="records">
+          <thead><tr>
+            <th data-sort="receiptNo">Receipt No.</th><th data-sort="date">Date</th><th data-sort="schoolName">School</th>
+            <th>Person in charge</th><th>Method</th><th data-sort="total" class="num">Amount</th><th></th>
+          </tr></thead>
+          <tbody id="rRows"></tbody>
+          <tfoot><tr><td colspan="5" class="r" id="rCount"></td><td class="r"><b id="rTotal"></b></td><td></td></tr></tfoot>
+        </table>
+      </div>
+    </section>
+
+    <!-- RECEIPT PREVIEW -->
+    <section id="view-receipt" class="view" hidden>
+      <div class="view-head no-print">
+        <button id="rcBack" class="btn ghost">← Back</button>
+        <div class="actions">
+          <button id="rcEdit" class="btn">✏️ Edit</button>
+          <button id="rcPrint" class="btn">🖨️ Print</button>
+          <button id="rcPdf" class="btn primary">📄 Download PDF</button>
+        </div>
+      </div>
+      <div id="receiptBox" class="paper"></div>
+    </section>
+
+    <!-- BACKUP -->
+    <section id="view-backup" class="view" hidden>
+      <div class="view-head"><h1>Backup &amp; Restore</h1></div>
+      <div class="card">
+        <h3>Why back up?</h3>
+        <p>Your records live inside this browser on this computer. If the browser data is cleared or the PC breaks, they are gone.
+          Keep a backup file on a USB stick or Google Drive.</p>
+        <p class="muted">Last backup: <b id="lastBackup">never</b></p>
+        <div class="actions left">
+          <button id="doBackup" class="btn primary">⬇️ Download backup file</button>
+          <label class="btn">⬆️ Restore from backup<input type="file" id="restoreFile" accept=".json" hidden></label>
+        </div>
+      </div>
+      <div class="card" id="autoCard">
+        <h3>Auto-backup (recommended)</h3>
+        <p>Pick a backup file once (for example inside your Google Drive or OneDrive folder). The app then saves to it automatically after every change.</p>
+        <p class="muted" id="autoStatus"></p>
+        <div class="actions left">
+          <button id="autoChoose" class="btn primary">📂 Choose auto-backup file</button>
+          <button id="autoReconnect" class="btn" hidden>🔗 Reconnect</button>
+          <button id="autoStop" class="btn ghost" hidden>Stop auto-backup</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" hidden></div>
+
+  <script src="vendor/jspdf.umd.min.js"></script>
+  <script src="vendor/jspdf.plugin.autotable.min.js"></script>
+  <script src="vendor/xlsx.full.min.js"></script>
+  <script src="js/logo.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/receipt.js"></script>
+  <script src="js/export.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
