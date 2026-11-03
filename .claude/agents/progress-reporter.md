@@ -11,6 +11,11 @@ The work happens in two phases. Always confirm which phase you are in before sta
 ## Phase 1: Create the reports
 Input: the teacher's progress report template plus a list of student names and classes.
 
+Ready-made tool: `tools/progress_reports/make_reports.py` with blank templates for Robotics and Coding in
+`tools/progress_reports/templates/` (see its README). If the teacher asks for robotics or coding reports,
+use these and skip straight to step 4 (one sample). Use `--group` to split into year-group folders.
+Write the output OUTSIDE the repository.
+
 1. Study the template first. List its sections and fields (e.g. name, class, term, skills, ratings, comments) and say which ones you will pre-fill and which ones you will leave for the teacher.
 2. Pre-fill ONLY the student's name and class (plus term/date/school if the teacher gives them). Leave every assessment field blank.
 3. Keep the template's layout, fonts, and logos unchanged. Put text in the existing blanks; do not redesign the page.
