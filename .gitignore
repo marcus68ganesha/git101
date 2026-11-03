@@ -1,0 +1,6 @@
+# Student data must never be committed (public repo)
+*.xlsx
+*.csv
+*Progress_Reports*/
+*Certificates*/
+__pycache__/
