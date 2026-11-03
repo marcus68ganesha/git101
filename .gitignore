@@ -3,3 +3,4 @@
 *.csv
 *Progress_Reports*/
 *Certificates*/
+__pycache__/
